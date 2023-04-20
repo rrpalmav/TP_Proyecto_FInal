@@ -1,0 +1,6 @@
+../Drivers/API/src/lib_lcd_16x02_i2c.c:33:6:lcd_16x02_init	8	static
+../Drivers/API/src/lib_lcd_16x02_i2c.c:66:6:lcd_16x02_send_cmd	32	static
+../Drivers/API/src/lib_lcd_16x02_i2c.c:79:6:lcd_16x02_send_data	32	static
+../Drivers/API/src/lib_lcd_16x02_i2c.c:92:6:lcd_16x02_clear	16	static
+../Drivers/API/src/lib_lcd_16x02_i2c.c:101:6:lcd_16x02_gotoxy	16	static
+../Drivers/API/src/lib_lcd_16x02_i2c.c:130:6:lcd_16x02_send_string	16	static

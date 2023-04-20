@@ -1,0 +1,6 @@
+lib_lcd_16x02_i2c.c:33:6:lcd_16x02_init	1
+lib_lcd_16x02_i2c.c:66:6:lcd_16x02_send_cmd	1
+lib_lcd_16x02_i2c.c:79:6:lcd_16x02_send_data	1
+lib_lcd_16x02_i2c.c:92:6:lcd_16x02_clear	2
+lib_lcd_16x02_i2c.c:101:6:lcd_16x02_gotoxy	7
+lib_lcd_16x02_i2c.c:130:6:lcd_16x02_send_string	4

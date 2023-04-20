@@ -28,7 +28,6 @@
 #include "lib_lcd_16x02_i2c.h"
 #include "lib_dht11.h"
 #include "stdio.h"
-//#include "lib_lcd_20x04_i2c.h"
 
 /* USER CODE END Includes */
 
@@ -69,69 +68,6 @@ uint16_t SUM, RH, TEMP;
 float temperatura = 0;
 float humedad = 0;
 uint8_t presencia = 0;
-
-/*
-void set_pin_output (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
-{
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
-	GPIO_InitStruct.Pin = GPIO_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIOx, &GPIO_InitStruct);
-}
-
-void set_pin_input (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
-{
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
-	GPIO_InitStruct.Pin = GPIO_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	HAL_GPIO_Init(GPIOx, &GPIO_InitStruct);
-}
-*/
-/*
-void DHT11_Start (void)
-{
-	Set_Pin_Output (GPIO_DHT11_GPIO_Port, GPIO_DHT11_Pin);  // set the pin as output
-	HAL_GPIO_WritePin (GPIO_DHT11_GPIO_Port, GPIO_DHT11_Pin, GPIO_PIN_RESET);   // pull the pin low
-	delay (18000);   // wait for 18ms
-    HAL_GPIO_WritePin (GPIO_DHT11_GPIO_Port, GPIO_DHT11_Pin, GPIO_PIN_SET);   // pull the pin high
-	delay (20);   // wait for 20us
-	Set_Pin_Input(GPIO_DHT11_GPIO_Port, GPIO_DHT11_Pin);    // set as input
-}
-
-uint8_t DHT11_Check_Response (void)
-{
-	uint8_t Response = 0;
-	delay (40);
-	if (! (HAL_GPIO_ReadPin (GPIO_DHT11_GPIO_Port, GPIO_DHT11_Pin)))
-	{
-		delay (80);
-		if ((HAL_GPIO_ReadPin (GPIO_DHT11_GPIO_Port, GPIO_DHT11_Pin))) Response = 1;
-		else Response = -1; // 255
-	}
-	while ((HAL_GPIO_ReadPin (GPIO_DHT11_GPIO_Port, GPIO_DHT11_Pin)));   // wait for the pin to go low
-
-	return Response;
-}
-
-uint8_t DHT11_Read (void)
-{
-	uint8_t i,j;
-	for (j=0;j<8;j++)
-	{
-		while (!(HAL_GPIO_ReadPin (GPIO_DHT11_GPIO_Port, GPIO_DHT11_Pin)));   // wait for the pin to go high
-		delay (40);   // wait for 40 us
-		if (!(HAL_GPIO_ReadPin (GPIO_DHT11_GPIO_Port, GPIO_DHT11_Pin)))   // if the pin is low
-		{
-			i&= ~(1<<(7-j));   // write 0
-		}
-		else i|= (1<<(7-j));  // if the pin is high, write 1
-		while ((HAL_GPIO_ReadPin (GPIO_DHT11_GPIO_Port, GPIO_DHT11_Pin)));  // wait for the pin to go low
-	}
-	return i;
-}
-*/
 
 /* USER CODE END PTD */
 
@@ -197,53 +133,11 @@ int main(void)
 
   HAL_TIM_Base_Start(&htim6);
 
-  /*
-  lcd_16x02_init ();
-
-  lcd_16x02_put_cur(1, 1);
-  lcd_16x02_send_string ("Hola Mundo");
-  HAL_Delay(1000);
-
-  lcd_16x02_put_cur(1, 2);
-  lcd_16x02_send_string("Ricardo Palma");
-
-  HAL_Delay(4000);
-
-  lcd_16x02_clear ();
-   */
-
-
-  // codigo de LCD
-  /*
-  lcd_16x02_init ();
-  lcd_16x02_gotoxy(1, 1);
-  lcd_16x02_send_string ("RICARDO ROBERTO PALMA VENTURA");
-
-  HAL_Delay(1000);
-  */
 
   lcd_16x02_init ();
-  //dht11_init(GPIOA, GPIO_PIN_1);
+  dht11_init(GPIOA, GPIO_PIN_0);
   HAL_Delay(3000);
-  lcd_16x02_gotoxy(1, 1);
-  lcd_16x02_send_string ("TEMP:- 24.0C");
-  lcd_16x02_send_string ("   HUM:- 30%");
-
-  /*
-  lcd_16x02_send_string ("       ");
-  lcd_16x02_send_string ("TEMP:- 24.0C");
-  lcd_16x02_send_string ("   HUM:- 30%");
-  */
-/*
-  lcd_16x02_gotoxy(1, 1);
-  lcd_16x02_send_string ("TEMP:- 24.0C");
-  lcd_16x02_send_string ("   HUM:- 30%");
-
-  HAL_Delay(3000);
-*/
-  //lcd_16x02_gotoxy(2, 1);
-  //lcd_16x02_send_string ("HUM:- 35.0");
-
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -252,27 +146,20 @@ int main(void)
   {
 
     /* USER CODE END WHILE */
-	  /*
-	  	  presencia = dht11_check_response();
-	  	  rh_byte1 = dht11_read_data ();
-	  	  rh_byte2 = dht11_read_data ();
-	  	  temp_byte1 = dht11_read_data ();
-	  	  temp_byte2 = dht11_read_data ();
-	  	  SUM = dht11_read_data();
+    presencia = dht11_check_response();
+    rh_byte1 = dht11_read_data ();
+    rh_byte2 = dht11_read_data ();
+    temp_byte1 = dht11_read_data ();
+    temp_byte2 = dht11_read_data ();
+    SUM = dht11_read_data();
 
-	  	  TEMP = temp_byte1;
-	  	  RH = rh_byte1;
+    TEMP = temp_byte1;
+    RH = rh_byte1;
 
-	  	  temperatura = (float) TEMP;
-	  	  humedad = (float) RH;
-	  	  */
-	  /*
-	  lcd_16x02_gotoxy(1, 1);
-	  lcd_16x02_send_string ("TEMP:- 24.0C");
-	  lcd_16x02_send_string ("   HUM:- 30%");
+    temperatura = (float) TEMP;
+    humedad = (float) RH;
 
-	  HAL_Delay(3000);
-	   */
+    HAL_Delay(3000);
 
     /* USER CODE BEGIN 3 */
   }

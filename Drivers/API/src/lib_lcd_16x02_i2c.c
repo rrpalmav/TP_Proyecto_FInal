@@ -107,9 +107,10 @@ void lcd_16x02_send_data (char data)
 void lcd_16x02_clear (void)
 {
 	lcd_16x02_send_cmd (0x80);
-	for (int i=0; i<70; i++)
-	{
-		lcd_16x02_send_data(' ');
+	for (int i=0; i< MAX_SIZE_LCD_16X02_I2C_ROW; i++){
+		for(int j=; j< MAX_SIZE_LCD_16X02_I2C_COLUMN; j++){
+			lcd_16x02_send_data(' ');
+		}
 	}
 }
 
@@ -132,9 +133,15 @@ void lcd_16x02_gotoxy(int y, int x)
     switch (y)
     {
         case 1:
+	    // se realizar una operacion de or de bits debido a que la posicion incial de la fila 1 es  hx80 = bx10000000
+            // cuando se realiza la operacion debemos de movernos la cantidad de columnas que se encuentran dentro de la misma fila que
+            // se encuentra especificados en la variables x
             x |= 0x80;
             break;
         case 2:
+	    // se realizar una operacion de or de bits debido a que la posicion incial de la fila 2 es  hxC0 = bx11000000
+            // cuando se realiza la operacion debemos de movernos la cantidad de columnas que se encuentran dentro de la misma fila que
+            // se encuentra especificados en la variables x
             x |= 0xC0;
             break;
     }

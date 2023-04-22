@@ -30,10 +30,14 @@ uint8_t current_row_lcd_16x02;
 uint8_t current_column_lcd_16x02;
 
 
+/*
+ * Funcion que permite realizar el inicio de la lcd_16x02
+ */
+
 void lcd_16x02_init (void)
 {
 	// 4 bits para inicializacion
-	state_lcd_16x02 = INIT_LCD_16x02;
+	lcd_16x02_state(0);
 	HAL_Delay(50);  				// realizar espera de 40ms
 	lcd_16x02_send_cmd (0x30);
 	HAL_Delay(5);   				// realizar espera de 4.1ms
@@ -58,11 +62,14 @@ void lcd_16x02_init (void)
 	current_row_lcd_16x02 = 1;
 	current_column_lcd_16x02 = 1;
 	lcd_16x02_gotoxy(current_row_lcd_16x02, current_column_lcd_16x02);
-	state_lcd_16x02 = READY_LCD_16x02;
+	lcd_16x02_state(0);
 }
 
 
-
+/*
+ * Funcion que permite transmitir un mensaje de comando para eatablecer para lectura el numero de puerto y numero de pin
+ * @cmd el caracter que especifica la instruccion especifica
+ */
 void lcd_16x02_send_cmd (char cmd)
 {
   char data_u, data_l;
@@ -76,6 +83,11 @@ void lcd_16x02_send_cmd (char cmd)
 	HAL_I2C_Master_Transmit (&hi2c1, SLAVE_ADDRESS_LCD,(uint8_t *) data_t, 4, 100);
 }
 
+/*
+ * Funcion que permite transmitir un mensaje de comando para eatablecer para lectura el numero de puerto y numero de pin
+ * @GPOIx   el numero de puerto
+ * @GÏO_Pin  el numero de pin
+ */
 void lcd_16x02_send_data (char data)
 {
 	char data_u, data_l;
@@ -89,6 +101,9 @@ void lcd_16x02_send_data (char data)
 	HAL_I2C_Master_Transmit (&hi2c1, SLAVE_ADDRESS_LCD,(uint8_t *) data_t, 4, 1000);
 }
 
+/*
+ * Funcion que permite limpiar la pantalla misma del LCD 16x02
+ */
 void lcd_16x02_clear (void)
 {
 	lcd_16x02_send_cmd (0x80);
@@ -98,6 +113,11 @@ void lcd_16x02_clear (void)
 	}
 }
 
+/*
+ * Funcion que permite posicionarme dentro de una ubicacion de la pantalla
+ * @y la posicion de la fila 1-2
+ * @x la posicion de la columna  1-16
+ */
 void lcd_16x02_gotoxy(int y, int x)
 {
 	if(x < 1 && x > 16) {
@@ -121,12 +141,40 @@ void lcd_16x02_gotoxy(int y, int x)
     lcd_16x02_send_cmd (x);
 }
 
-/*
-void lcd_16x02_send_string( char *str){
-	stlen()
-}
-*/
 
+/*
+ * Funcion que realizar transiciones de estado de nuestra libreria como tal
+
+ */
+void lcd_16x02_state(int msg){
+
+	switch(state_lcd_16x02){
+		OFF_LCD_16x02:
+			state_lcd_16x02 = INIT_LCD_16x02;
+			break;
+		INIT_LCD_16x02:
+			state_lcd_16x02 = READY_LCD_16x02;
+			break;
+		READY_LCD_16x02:
+			state_lcd_16x02 = SEND_LCD_16x02;
+			break;
+		SEND_LCD_16x02:
+			state_lcd_16x02 = SENDING_LCD_16x02;
+			break;
+		SENDING_LCD_16x02:
+			if(msg == 0) state_lcd_16x02 = SEND_LCD_16x02;
+			if(msg == 1) state_lcd_16x02 = ERROR_LCD_16x02;
+			break;
+		default:
+			break;
+
+	}
+}
+
+
+/*
+ * Funcion que permite realizar el envio de nuestro
+ */
 void lcd_16x02_send_string (char *str)
 {
 	while (*str){

@@ -9,7 +9,7 @@
 #define LIB_LCD_16X02_I2C_H
 
 
-#define MAX_SIZE_LCD_16X02_I2C_ROW 		2
+#define MAX_SIZE_LCD_16X02_I2C_ROW 	2
 #define MAX_SIZE_LCD_16X02_I2C_COLUMN 	16
 
 typedef enum {
